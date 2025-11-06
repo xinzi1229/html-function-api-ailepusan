@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浦三义卖</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+            <div class="flex justify-between h-14">
+                <div class="flex items-center">
+                    <i class="fas fa-hand-holding-heart text-pink-500 text-xl sm:text-2xl mr-2"></i>
+                    <h1 class="text-lg sm:text-xl font-bold text-gray-800">浦三义卖</h1>
+                </div>
+                
+                <!-- 主要功能按钮 - 均匀布置，带图标 -->
+                <div class="flex items-center justify-center flex-1 max-w-md mx-4">
+                    <div class="flex items-center space-x-2 sm:space-x-4 w-full justify-around">
+                        <button onclick="showSection('record')" class="nav-btn flex flex-col items-center px-2 py-2 rounded-lg hover:bg-gray-100 transition group">
+                            <i class="fas fa-plus-circle text-lg sm:text-xl text-gray-600 group-hover:text-pink-500 mb-1"></i>
+                            <span class="text-xs sm:text-sm font-medium text-gray-600 group-hover:text-pink-500">添加</span>
+                        </button>
+                        <button onclick="showSection('profile')" class="nav-btn flex flex-col items-center px-2 py-2 rounded-lg hover:bg-gray-100 transition group">
+                            <i class="fas fa-user text-lg sm:text-xl text-gray-600 group-hover:text-pink-500 mb-1"></i>
+                            <span class="text-xs sm:text-sm font-medium text-gray-600 group-hover:text-pink-500">我的</span>
+                        </button>
+                        <button onclick="showSection('stats')" class="nav-btn flex flex-col items-center px-2 py-2 rounded-lg hover:bg-gray-100 transition group">
+                            <i class="fas fa-chart-bar text-lg sm:text-xl text-gray-600 group-hover:text-pink-500 mb-1"></i>
+                            <span class="text-xs sm:text-sm font-medium text-gray-600 group-hover:text-pink-500">统计</span>
+                        </button>
+                        <button onclick="logout()" class="nav-btn flex flex-col items-center px-2 py-2 rounded-lg hover:bg-red-50 transition group">
+                            <i class="fas fa-sign-out-alt text-lg sm:text-xl text-gray-600 group-hover:text-red-500 mb-1"></i>
+                            <span class="text-xs sm:text-sm font-medium text-gray-600 group-hover:text-red-500">退出</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 登录/注册界面 -->
+    <div id="authSection" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <i class="fas fa-hand-holding-heart text-pink-500 text-6xl mb-4"></i>
+                <h2 class="text-3xl font-extrabold text-gray-900">浦三义卖统计系统</h2>
+                <p class="mt-2 text-sm text-gray-600">请登录或注册以继续</p>
+            </div>
+            
+            <!-- 登录表单 -->
+            <div id="loginForm" class="bg-white rounded-lg shadow-xl p-8 fade-in">
+                <h3 class="text-2xl font-bold mb-6 text-center">登录</h3>
+                <form onsubmit="login(event)">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">用户名</label>
+                        <input type="text" id="loginUsername" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">密码</label>
+                        <input type="password" id="loginPassword" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500">
+                    </div>
+                    <button type="submit" class="w-full bg-pink-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-pink-600 transition">
+                        登录
+                    </button>
+                </form>
+                <p class="text-center mt-4 text-sm text-gray-600">
+                    没有账号？<a href="#" onclick="toggleAuth()" class="text-pink-500 hover:underline">立即注册</a>
+                </p>
+            </div>
+
+            <!-- 注册表单 -->
+            <div id="registerForm" class="bg-white rounded-lg shadow-xl p-8 hidden">
+                <h3 class="text-2xl font-bold mb-6 text-center">注册</h3>
+                <form onsubmit="register(event)">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">用户名</label>
+                        <input type="text" id="regUsername" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">密码</label>
+                        <input type="password" id="regPassword" required minlength="6"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500">
+                    </div>
+                    <button type="submit" class="w-full bg-pink-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-pink-600 transition">
+                        注册
+                    </button>
+                </form>
+                <p class="text-center mt-4 text-sm text-gray-600">
+                    已有账号？<a href="#" onclick="toggleAuth()" class="text-pink-500 hover:underline">立即登录</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div id="mainContent" class="hidden">
+        <!-- 销售录入 -->
+        <div id="recordSection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="max-w-xl mx-auto">
+                <div class="bg-white rounded-lg shadow-xl p-4 sm:p-6">
+                    <!-- 显示当前用户名 -->
+                    <div class="mb-4 p-3 bg-pink-50 rounded-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-user-circle text-pink-500 text-xl mr-2"></i>
+                            <span class="text-base font-semibold text-gray-800">当前用户：</span>
+                            <span id="currentUsername" class="text-base font-bold text-pink-600 ml-2"></span>
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 text-center">
+                        <i class="fas fa-plus-circle mr-2 text-pink-500"></i>添加义卖记录
+                    </h2>
+                    <form onsubmit="addSale(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-1">物品名称</label>
+                            <input type="text" id="itemName" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
+                                   placeholder="请输入物品名称">
+                        </div>
+                        
+                        <!-- 图片上传区域 -->
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-1">物品图片（选填）</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-3 text-center hover:border-pink-500 transition relative">
+                                <input type="file" id="imageInput" accept="image/*" capture="environment" class="hidden" onchange="handleImageSelect(event)">
+                                
+                                <div id="imagePreviewContainer" class="mb-2 relative">
+                                    <img id="imagePreview" class="image-preview mx-auto hidden" alt="图片预览">
+                                    <div id="uploadingOverlay" class="uploading-overlay hidden">
+                                        <div class="text-center">
+                                            <i class="fas fa-spinner fa-spin text-3xl text-pink-500 mb-2"></i>
+                                            <p class="text-sm text-gray-600">正在上传图片...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button type="button" onclick="document.getElementById('imageInput').click()" 
+                                        class="w-full bg-blue-100 text-blue-700 py-2 px-3 rounded-lg hover:bg-blue-200 transition text-sm">
+                                    <i class="fas fa-camera mr-2"></i>上传图片
+                                </button>
+                                <p class="text-xs text-gray-500 mt-1">支持 JPG、PNG 格式，最大 5MB</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-1">数量</label>
+                                <input type="number" id="itemQuantity" min="1" value="1" required
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
+                                       placeholder="1">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-1">单价（元）</label>
+                                <input type="number" id="itemPrice" step="0.01" min="0" required
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
+                                       placeholder="0.00">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-1">购买者姓名（选填）</label>
+                            <input type="text" id="buyerName"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500"
+                                   placeholder="请输入购买者姓名">
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="text-base font-semibold text-gray-700">总计金额：</span>
+                                <span id="totalAmount" class="text-xl font-bold text-pink-500">¥0.00</span>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" id="submitBtn" class="w-full bg-pink-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-pink-600 transition">
+                            <i class="fas fa-save mr-2"></i>保存义卖记录
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户中心 -->
+        <div id="profileSection" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- 用户信息卡片 -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <div class="text-center">
+                            <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-pink-100 mb-4">
+                                <i class="fas fa-user text-pink-500 text-3xl"></i>
+                            </div>
+                            <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-2" id="profileUsername">用户名</h3>
+                            <p class="text-gray-500 mb-6">义卖志愿者</p>
+                            
+                            <!-- 个人统计 -->
+                            <div class="space-y-3 text-left">
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600 text-sm">销售笔数</span>
+                                    <span id="myTotalSales" class="font-bold text-gray-800">0</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600 text-sm">销售数量</span>
+                                    <span id="myTotalQuantity" class="font-bold text-gray-800">0</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600 text-sm">总收入</span>
+                                    <span id="myTotalRevenue" class="font-bold text-pink-500">¥0</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600 text-sm">物品种类</span>
+                                    <span id="myUniqueItems" class="font-bold text-gray-800">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 我的销售记录 -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-6">
+                            <i class="fas fa-shopping-bag mr-2 text-pink-500"></i>我的义卖记录
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">图片</th>
+                                        <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">时间</th>
+                                        <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">物品</th>
+                                        <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">数量</th>
+                                        <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">单价</th>
+                                        <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">总价</th>
+                                        <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">购买者</th>
+                                        <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mySalesList" class="bg-white divide-y divide-gray-200">
+                                    <!-- 动态加载 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 统计汇总 -->
+        <div id="statsSection" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">
+                <i class="fas fa-chart-bar mr-3 text-pink-500"></i>统计汇总
+            </h2>
+
+            <!-- 统计卡片 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 card-hover">
+                    <div class="flex items-center">
+                        <div class="p-2 sm:p-3 bg-blue-100 rounded-full">
+                            <i class="fas fa-shopping-cart text-blue-500 text-lg sm:text-xl"></i>
+                        </div>
+                        <div class="ml-3 sm:ml-4">
+                            <p class="text-gray-500 text-xs sm:text-sm">总销售笔数</p>
+                            <p id="totalSales" class="text-xl sm:text-2xl font-bold text-gray-800">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 card-hover">
+                    <div class="flex items-center">
+                        <div class="p-2 sm:p-3 bg-green-100 rounded-full">
+                            <i class="fas fa-boxes text-green-500 text-lg sm:text-xl"></i>
+                        </div>
+                        <div class="ml-3 sm:ml-4">
+                            <p class="text-gray-500 text-xs sm:text-sm">总销售数量</p>
+                            <p id="totalQuantity" class="text-xl sm:text-2xl font-bold text-gray-800">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 card-hover">
+                    <div class="flex items-center">
+                        <div class="p-2 sm:p-3 bg-yellow-100 rounded-full">
+                            <i class="fas fa-dollar-sign text-yellow-500 text-lg sm:text-xl"></i>
+                        </div>
+                        <div class="ml-3 sm:ml-4">
+                            <p class="text-gray-500 text-xs sm:text-sm">总收入</p>
+                            <p id="totalRevenue" class="text-xl sm:text-2xl font-bold text-gray-800">¥0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 card-hover">
+                    <div class="flex items-center">
+                        <div class="p-2 sm:p-3 bg-purple-100 rounded-full">
+                            <i class="fas fa-tags text-purple-500 text-lg sm:text-xl"></i>
+                        </div>
+                        <div class="ml-3 sm:ml-4">
+                            <p class="text-gray-500 text-xs sm:text-sm">物品种类</p>
+                            <p id="uniqueItems" class="text-xl sm:text-2xl font-bold text-gray-800">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 今日统计 -->
+            <div class="bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg shadow-lg p-4 sm:p-6 mb-8 text-white">
+                <h3 class="text-lg sm:text-xl font-bold mb-4">
+                    <i class="fas fa-calendar-day mr-2"></i>今日统计
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <p class="text-pink-100 text-sm">销售笔数</p>
+                        <p id="todaySales" class="text-2xl sm:text-3xl font-bold">0</p>
+                    </div>
+                    <div>
+                        <p class="text-pink-100 text-sm">销售数量</p>
+                        <p id="todayQuantity" class="text-2xl sm:text-3xl font-bold">0</p>
+                    </div>
+                    <div>
+                        <p class="text-pink-100 text-sm">收入</p>
+                        <p id="todayRevenue" class="text-2xl sm:text-3xl font-bold">¥0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 物品分类统计 -->
+            <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-8">
+                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-list-alt text-indigo-500 mr-2"></i>物品分类统计
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">物品名称</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">销售数量</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">总收入</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">销售次数</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">平均单价</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">价格区间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryStatsList" class="bg-white divide-y divide-gray-200">
+                            <!-- 动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 热门物品 -->
+            <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-fire text-orange-500 mr-2"></i>热门物品排行
+                </h3>
+                <div id="topItems" class="space-y-3">
+                    <!-- 动态加载 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div id="toast" class="fixed bottom-4 right-4 hidden z-50">
+        <div class="bg-green-500 text-white px-4 sm:px-6 py-3 rounded-lg shadow-lg flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="toastMessage">操作成功</span>
+        </div>
+    </div>
+
+    <script src
